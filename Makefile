@@ -6,7 +6,7 @@
 #    By: kcharla <kcharla@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/08/31 21:27:46 by kcharla           #+#    #+#              #
-#    Updated: 2020/09/08 07:19:47 by kcharla          ###   ########.fr        #
+#    Updated: 2020/09/08 13:35:34 by u18600003        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CC			:= gcc
 DEBUG		:= -g
 OPTIM		:= -O2
 
-LIBS		:= -L ./lib/mlx -lmlx -L ./lib/ft -lft -framework OpenGL -framework AppKit
+LIBS		:= -L ./lib/mlx -lmlx -L ./lib/ft -lft -framework AppKit
 INCLUDE		:= -I ./inc -I ./lib/mlx/inc -I ./lib/ft/inc
 
 COMPILE		= $(CC) -Wall -Wextra -Wall $(DEBUG) $(OPTIM) $(INCLUDE)
@@ -55,8 +55,10 @@ LIB_FT		:= ./lib/ft/libft.a
 all: $(NAME)
 
 # TODO remove LIB_MLX_FILE
-$(NAME): $(LIB_MLX) $(LIB_FT) $(BUILD_DIRS) $(OBJ)    $(LIB_MLX_FILE)
+$(NAME): $(LIB_MLX) $(LIB_FT) $(BUILD_DIRS) $(OBJ)
 	$(COMPILE) $(LIBS) $(OBJ) -o $(NAME)
+	install_name_tool -add_rpath @executable_path/lib/mlx/. RT
+	install_name_tool -change libmlx.dylib @rpath/libmlx.dylib RT
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c $(HEADERS)
 	$(COMPILE) -c $< -o $@
@@ -90,9 +92,9 @@ $(LIB_MLX): lib
 	@make -C ./lib/mlx
 
 # TODO: link with LD!
-$(LIB_MLX_FILE): $(LIB_MLX)
-	@echo 'Copying file libmlx.dylib...'
-	cp $(LIB_MLX) .
+# $(LIB_MLX_FILE): $(LIB_MLX)
+# 	@echo 'Copying file libmlx.dylib...'
+# 	cp $(LIB_MLX) .
 
 $(LIB_FT): lib
 	@make -C ./lib/ft

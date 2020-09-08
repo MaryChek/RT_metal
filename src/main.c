@@ -12,8 +12,8 @@
 
 #include "rt.h"
 
-t_rt		*g_rt;
-t_mlx		*g_mlx;
+t_rt			*g_rt;
+t_mlx			*g_mlx;
 
 int				main(int ac, char **av)
 {

@@ -8,26 +8,27 @@ project(RT)
 
 #  find src -type f -name '*.c' | sort | column -c 80 | sed "s/^/       /"
 set(${PROJECT_NAME}_SOURCES
-		src/fio/fio_zip_load.c src/main.c
+		src/err/rt_err.c                src/gui/rt_editor_drag_file.c
+		src/err/rt_warn.c               src/main.c
+		src/fio/fio_zip_load.c          src/rtc/rt_init.c
+		src/fio/fio_zip_save.c          src/rtc/rt_loop.c
 		src/gui/coroutine_example.c
-        )
+		)
 
 add_executable(${PROJECT_NAME}  ${${PROJECT_NAME}_SOURCES})
-
-target_include_directories(${PROJECT_NAME} PUBLIC
-        ${SDL2_INCLUDE_DIR}						)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
         ${PROJECT_SOURCE_DIR}/inc				)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
-        ${PROJECT_SOURCE_DIR}/lib/mgx/inc		)
+        ${PROJECT_SOURCE_DIR}/lib/mlx/inc		)
 
-target_link_libraries(${PROJECT_NAME} m)
-target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/lib/mgx/libmgx.a)
+target_include_directories(${PROJECT_NAME} PUBLIC
+		${PROJECT_SOURCE_DIR}/lib/ft/inc		)
 
-find_package(OpenGL REQUIRED)
-include_directories( ${OPENGL_INCLUDE_DIRS} )
+target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/lib/ft/libft.a)
 
-target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} )
+target_link_libraries(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/lib/mlx/libmlx.dylib)
+target_link_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/lib/mlx)
+
 target_link_libraries(${PROJECT_NAME} "-framework AppKit")
