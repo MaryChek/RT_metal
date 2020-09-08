@@ -2,6 +2,8 @@
 
 Ray-Tracing project - visualization from scratch on C and Swift/Metal
 
+[miro board](https://miro.com/app/board/o9J_kmHIWs4=/)
+
 ## Build
 ```
 git clone https://github.com/AlexeyBukin/RT_metal.git
