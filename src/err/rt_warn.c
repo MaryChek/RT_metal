@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rt_err.c                                           :+:      :+:    :+:   */
+/*   rt_warn.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kcharla <kcharla@student.42.fr>            +#+  +:+       +#+        */
+/*   By: u18600003 <u18600003@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/07 12:40:57 by kcharla           #+#    #+#             */
-/*   Updated: 2020/09/07 12:41:44 by kcharla          ###   ########.fr       */
+/*   Created: 2020/09/08 11:49:02 by u18600003         #+#    #+#             */
+/*   Updated: 2020/09/08 11:50:06 by u18600003        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "rt.h"
 
-int			rt_err(char *msg)
+int			rt_warn(char *msg)
 {
-	ft_printf("Error: %s", msg);
-	return (-1);
+	ft_printf("Warning: %s", msg);
+	return (0);
 }
 
-int			rt_error(char *msg, int ecode)
+int			rt_warning(char *msg, int ecode)
 {
-	ft_printf("Error: (%i) %s", ecode, msg);
+	ft_printf("Warning: ($i) %s", ecode, msg);
 	return (ecode);
 }
