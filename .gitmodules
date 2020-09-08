@@ -1,0 +1,6 @@
+[submodule "lib/mlx"]
+	path = lib/mlx
+	url = https://github.com/AlexeyBukin/libmgx_swift.git
+[submodule "lib/ft"]
+	path = lib/ft
+	url = https://github.com/AlexeyBukin/libft.git
