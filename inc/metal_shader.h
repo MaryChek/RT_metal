@@ -187,5 +187,6 @@ t_color				col_from_normal(float3 vector);
 t_color				rt_trace_mode_normals(t_scene *scene, t_ray ray);
 t_obj				*rt_trace_nearest(t_scene *scene, t_ray ray);
 t_color 			rt_trace_mode_color_only(t_scene *scene, t_ray ray);
+t_color				rt_trace_mode_light(t_scene *scene, t_ray ray);
 
 #endif

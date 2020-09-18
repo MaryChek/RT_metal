@@ -51,7 +51,7 @@ float3			cook_torrance_ggx(float3 n, float3 l, float3 v, t_material *m)
 	f_diffk = fresnel_schlick(m->f0, dot(normalize(v + l), v));
 	speck = f_diffk * (g * ggx_distribution(dot(n, normalize(v + l)), sqrt(m->roughness)) * 0.25 / (n_dot_v + 0.001));
 	f_diffk = vec_clamp(((float3){1.0, 1.0, 1.0} - f_diffk), 0.0, 1.0);
-	f_diffk = m->albedo * f_diffk;
+	f_diffk = m->color * f_diffk;
 	f_diffk = f_diffk * (n_dot_l / M_PI);
 	return (speck + f_diffk);
 }
