@@ -323,6 +323,19 @@ t_obj					*rt_trace_nearest_dist(t_scene *scene, t_ray ray, float *dist)
 	return (nearest);
 }
 
+float		brdf_get_g(float3 n, float3 v, float3 l, t_material *mat)
+{
+	float	g;
+	float	roug_sqr;
+
+	if (mat == NULL)
+		return (INFINITY);
+	roug_sqr = sqrt(mat->roughness);
+	g = ggx_partial_geometry(dot(n, v), roug_sqr);
+	g = g * ggx_partial_geometry(dot(n, l), roug_sqr);
+	return (g);
+}
+
 ///figur norm-------------------------------------------------
 
 ///plane norm-------------------------------------------------
