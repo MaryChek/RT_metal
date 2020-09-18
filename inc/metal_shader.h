@@ -191,5 +191,7 @@ t_color				rt_trace_mode_light(t_scene *scene, t_ray ray);
 t_color				rt_trace_mode_dist(t_scene *scene, t_ray ray);
 float				brdf_get_g(float3 n, float3 v, float3 l, t_material *mat);
 t_color				rt_trace_brdf_g(t_scene *scene, t_ray ray);
+float				brdf_get_d(float3 n, float3 v, float3 l, t_material *mat);
+t_color				rt_trace_brdf_d(t_scene *scene, t_ray ray);
 
 #endif

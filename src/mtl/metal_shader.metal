@@ -323,6 +323,20 @@ t_obj					*rt_trace_nearest_dist(t_scene *scene, t_ray ray, float *dist)
 	return (nearest);
 }
 
+float		brdf_get_d(float3 n, float3 v, float3 l, t_material *mat)
+{
+	float	d;
+	float	roug_sqr;
+	float3	h;
+
+	if (mat == NULL)
+		return (INFINITY);
+	h = normalize(v + l);
+	roug_sqr = sqrt(mat->roughness);
+	d = ggx_distribution(dot(n, h), roug_sqr);
+	return (d);
+}
+
 float		brdf_get_g(float3 n, float3 v, float3 l, t_material *mat)
 {
 	float	g;
