@@ -184,6 +184,7 @@ float3				cook_torrance_ggx(float3 n, float3 l, float3 v, t_material *m);
 t_color				rt_trace_mode_ggx(t_scene *scene, t_ray cam_ray);
 float				ggx_partial_geometry(float cos_theta_n, float alpha);
 t_color				col_from_normal(float3 vector);
+t_color 			col_from_vec(float3 vector);
 t_color				rt_trace_mode_normals(t_scene *scene, t_ray ray);
 t_obj				*rt_trace_nearest(t_scene *scene, t_ray ray);
 t_color 			rt_trace_mode_color_only(t_scene *scene, t_ray ray);
@@ -193,5 +194,6 @@ float				brdf_get_g(float3 n, float3 v, float3 l, t_material *mat);
 t_color				rt_trace_brdf_g(t_scene *scene, t_ray ray);
 float				brdf_get_d(float3 n, float3 v, float3 l, t_material *mat);
 t_color				rt_trace_brdf_d(t_scene *scene, t_ray ray);
+t_color				rt_trace_mode_normals_angle(t_scene *scene, t_ray ray);
 
 #endif

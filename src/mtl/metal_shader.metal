@@ -56,6 +56,17 @@ float3		vec_to_srgb(float3 v)
 	return (v);
 }
 
+t_color 	col_from_vec(float3 vector)
+{
+	t_color res;
+
+	res[0] = vector.x;
+	res[1] = vector.y;
+	res[2] = vector.z;
+	res[3] = ALPHA_MAX;
+	return (res);
+}
+
 t_color		col_from_normal(float3 vector)
 {
 	unsigned char	res[4];
@@ -478,7 +489,7 @@ t_color					rt_trace(t_scene *scene, t_ray ray, t_trace_mode mode)
 		return (rt_trace_brdf_d(scene, ray));
 	else if (mode == TRACE_MODE_NORM_ANGLE)
 		return (rt_trace_mode_normals_angle(scene, ray));
-	return (col(0, 0, 0));
+	return ((t_color){0, 0, 0, ALPHA_MAX});
 }
 
 t_ray					project_get_ray_from_coords(t_camera *cam, double x, double y)
