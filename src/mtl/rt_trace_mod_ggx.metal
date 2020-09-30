@@ -104,3 +104,18 @@ t_color			rt_trace_mode_ggx(t_scene *scene, t_ray cam_ray)
 	res = vec_clamp(res, 0, 1);
 	return (col_from_vec_norm(vec_to_srgb(res)));
 }
+
+kernal	void 	trace_mode_ggx(	device	t_scene* 				scene [[buffer(0)]],
+								texture2d<float,access::write>	pixel [[texture(1)]],
+								uint2                     		gid [[thread_position_in_grid]])
+{
+	t_rat	ray;
+	t_scene s;
+	float4	color;
+	t_color	buf;
+
+	ray = project_get_ray_from_coords(scene.camera, git.x, git.y);
+	buf = rt_trace_mode_ggx(scene, ray);
+	color = (float4){buf.r, buf.g, buf.g, buf.a};
+	out.write(color, git);
+}

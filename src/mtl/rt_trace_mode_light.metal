@@ -12,7 +12,7 @@
 
 #include "metal_shader.h"
 
-t_color		rt_trace_mode_light(t_scene *scene, t_ray ray)
+t_color			rt_trace_mode_light(t_scene *scene, t_ray ray)
 {
 	t_ray		normal;
 	float3		res;
@@ -35,4 +35,19 @@ t_color		rt_trace_mode_light(t_scene *scene, t_ray ray)
 		return (col_from_vec_norm(res));
 	}
 	return ((t_color)(0, 0, 0, ALPHA_MAX));
+}
+
+kernal	void 	trace_mode_light(	device	t_scene* 				scene [[buffer(0)]],
+									texture2d<float,access::write>	pixel [[texture(1)]],
+									uint2                     		gid [[thread_position_in_grid]])
+{
+	t_rat	ray;
+	t_scene s;
+	float4	color;
+	t_color	buf;
+
+	ray = project_get_ray_from_coords(scene.camera, git.x, git.y);
+	buf = rt_trace_mode_light(scene, ray);
+	color = (float4){buf.r, buf.g, buf.g, buf.a};
+	out.write(color, git);
 }
