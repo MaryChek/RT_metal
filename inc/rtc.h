@@ -1,28 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rt.h                                               :+:      :+:    :+:   */
+/*   rtc.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kcharla <kcharla@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/07 13:17:11 by kcharla           #+#    #+#             */
-/*   Updated: 2020/09/30 20:53:55 by kcharla          ###   ########.fr       */
+/*   Created: 2020/09/30 20:58:12 by kcharla           #+#    #+#             */
+/*   Updated: 2020/09/30 20:58:12 by kcharla          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RT_H
-# define RT_H
+#ifndef RTC_H
+# define RTC_H
 
-# include "err.h"
-# include "rt_s.h"
-# include "fio.h"
-# include "gui.h"
-# include "rtc.h"
+int		rtc_init();
+int		rtc_loop();
+void	rtc_hooks_editor(void *win);
 
-extern t_rt		*g_rt;
-extern t_mlx	*g_mlx;
-
-int		rt_loop(void *void_rt);
-int		rt_init();
+//void	rtc_hooks_viewer(void *win)
+//void	rtc_hooks_renderer(void *win)
 
 #endif

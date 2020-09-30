@@ -8,11 +8,11 @@ project(RT)
 
 #  find src -type f -name '*.c' | sort | column -c 80 | sed "s/^/       /"
 set(${PROJECT_NAME}_SOURCES
-		src/err/rt_err.c                src/gui/rt_editor_drag_file.c
-		src/err/rt_warn.c               src/main.c
-		src/fio/fio_zip_load.c          src/rtc/rt_init.c
-		src/fio/fio_zip_save.c          src/rtc/rt_loop.c
-		src/gui/coroutine_example.c
+		src/err/rt_err.c         src/gui/rt_editor_drag_file.c
+		src/err/rt_warn.c                src/main.c
+		src/fio/fio_zip_load.c           src/rtc/rt_init.c
+		src/fio/fio_zip_save.c           src/rtc/rtc_init.c
+		src/gui/coroutine_example.c      src/rtc/rtc_loop.c
 		)
 
 add_executable(${PROJECT_NAME}  ${${PROJECT_NAME}_SOURCES})

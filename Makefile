@@ -32,9 +32,10 @@ BUILD_DIRS	= $(patsubst $(SRC_DIR)%, $(BUILD_DIR)%, $(SRC_DIRS))
 
 # find src -type f -name '*.c' | sort | column -c 100 | sed 's/$/ \\\\/'
 SRC_FILES	:= \
-src/err/rt_err.c                src/gui/coroutine_example.c     src/rtc/rt_init.c \
-src/fio/fio_zip_load.c          src/gui/rt_editor_drag_file.c   src/rtc/rt_loop.c \
-src/fio/fio_zip_save.c          src/main.c \
+src/err/rt_err.c                src/gui/coroutine_example.c     src/rtc/rtc_init.c \
+src/err/rt_warn.c               src/gui/rt_editor_drag_file.c   src/rtc/rtc_loop.c \
+src/fio/fio_zip_load.c          src/main.c \
+src/fio/fio_zip_save.c          src/rtc/rt_init.c \
 
 OBJ			= $(patsubst $(SRC_DIR)%.c, $(BUILD_DIR)%.o, $(SRC_FILES))
 
