@@ -6,7 +6,7 @@
 /*   By: kcharla <kcharla@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/30 21:04:09 by kcharla           #+#    #+#             */
-/*   Updated: 2020/09/30 21:04:09 by kcharla          ###   ########.fr       */
+/*   Updated: 2020/09/30 23:50:47 by kcharla          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,12 @@ int			rtc_init()
 //	rtc_hooks_render(win_render);
 
 	mlx_loop_hook(g_mlx, rt_loop, g_rt);
+
+	// TODO add this
+//	if (mlx_metal_lib_load_source(d->mlx, libstr) != 0)
+//		printf("lib govno\n");
+//	else
+//		printf("lib success!\n");
+
 	return (0);
 }
