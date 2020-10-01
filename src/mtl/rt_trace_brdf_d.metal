@@ -22,7 +22,7 @@ t_color		rt_trace_brdf_d(t_scene *scene, t_ray ray)
 
 	if ((nearest = rt_trace_nearest_dist(scene, ray, &dist)) == NULL)
 		return ((t_color){0, 0, 0, ALPHA_MAX});
-	normal.pos = ray.pos + ray.dir * dist);
+	normal.pos = ray.pos + ray.dir * dist;
 	normal.dir = trace_normal_fig(ray, nearest);
 	d = 0.0;
 	i = 0;
@@ -37,4 +37,19 @@ t_color		rt_trace_brdf_d(t_scene *scene, t_ray ray)
 		i++;
 	}
 	return (col_from_vec_norm((float3){d, d, d}));
+}
+
+kernal	void 	trace_brdf_d(	device	t_scene* 				scene [[buffer(0)]],
+								texture2d<float,access::write>	pixel [[texture(1)]],
+								uint2                     		gid [[thread_position_in_grid]])
+{
+	t_rat	ray;
+	t_scene s;
+	float4	color;
+	t_color	buf;
+
+	ray = project_get_ray_from_coords(scene.camera, git.x, git.y);
+	buf = rt_trace_brdf_d(scene, ray);
+	color = (float4){buf.r, buf.g, buf.g, buf.a};
+	out.write(color, git);
 }

@@ -38,3 +38,18 @@ t_color		rt_trace_brdf_g(t_scene *scene, t_ray ray)
 	}
 	return (col_from_vec_norm((float3){g, g, g}));
 }
+
+kernal	void 	trace_brdf_g(	device	t_scene* 				scene [[buffer(0)]],
+								texture2d<float,access::write>	pixel [[texture(1)]],
+								uint2                     		gid [[thread_position_in_grid]])
+{
+	t_rat	ray;
+	t_scene s;
+	float4	color;
+	t_color	buf;
+
+	ray = project_get_ray_from_coords(scene.camera, git.x, git.y);
+	buf = rt_trace_brdf_g(scene, ray);
+	color = (float4){buf.r, buf.g, buf.g, buf.a};
+	out.write(color, git);
+}

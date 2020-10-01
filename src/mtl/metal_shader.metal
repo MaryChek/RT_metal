@@ -471,27 +471,6 @@ float3		trace_normal_fig(t_ray ray, t_obj *fig)
 		return ((float3){INFINITY, INFINITY, INFINITY});
 }
 
-t_color					rt_trace(t_scene *scene, t_ray ray, t_trace_mode mode)
-{
-	if (mode == TRACE_MODE_FULL)
-		return (rt_trace_mode_ggx(scene, ray));
-	else if (mode == TRACE_MODE_NORMALS)
-		return (rt_trace_mode_normals(scene, ray));
-	else if (mode == TRACE_MODE_COLOR)
-		return (rt_trace_mode_color_only(scene, ray));
-	else if (mode == TRACE_MODE_LIGHT)
-		return (rt_trace_mode_light(scene, ray));
-	else if (mode == TRACE_MODE_DIST)
-		return (rt_trace_mode_dist(scene, ray));
-	else if (mode == TRACE_MODE_BRDF_G)
-		return (rt_trace_brdf_g(scene, ray));
-	else if (mode == TRACE_MODE_BRDF_D)
-		return (rt_trace_brdf_d(scene, ray));
-	else if (mode == TRACE_MODE_NORM_ANGLE)
-		return (rt_trace_mode_normals_angle(scene, ray));
-	return ((t_color){0, 0, 0, ALPHA_MAX});
-}
-
 t_ray					project_get_ray_from_coords(t_camera *cam, double x, double y)
 {
 	t_ray				ray;
@@ -505,12 +484,4 @@ t_ray					project_get_ray_from_coords(t_camera *cam, double x, double y)
 	ray.pos = cam->pos;
 	ray.dir = normalize(dot - cam->pos);
 	return (ray);
-}
-
-kernal	void 			shader(int pixel, t_obj *obj, t_camera *camera)
-{
-	t_ray				ray;
-
-	ray = project_get_ray_from_coords(c, x, y);
-	pixel = rt_trace(scene, ray, camera->mode);
 }
