@@ -6,7 +6,7 @@
 /*   By: kcharla <kcharla@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 21:53:04 by kcharla           #+#    #+#             */
-/*   Updated: 2020/10/12 22:19:52 by kcharla          ###   ########.fr       */
+/*   Updated: 2020/10/12 23:15:52 by kcharla          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,17 @@
 
 int				rt_init(t_rts **rts_ptr)
 {
+	t_rts		*rts;
+
 	if (rts_ptr == NULL)
 		return (rt_err("rts_ptr is NULL pointer"));
-	*rts_ptr = NULL;
-	if ((rts_init(rts_ptr)))
+	rts = NULL;
+	if ((rts_init(&rts)))
 		return (rt_err("Cannot init RT struct"));
-	if (((*rts_ptr)->mgx = mlx_init()) == NULL)
+	if ((rts->mgx = mlx_init()) == NULL)
 		return (rt_err("Cannot init MLX"));
-	if (rtc_init(*rts_ptr))
+	if (rtc_init(rts))
 		return (rt_err("Cannot init RT core"));
+	*rts_ptr = rts;
 	return (0);
 }

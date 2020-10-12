@@ -6,7 +6,7 @@
 /*   By: kcharla <kcharla@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 21:59:30 by kcharla           #+#    #+#             */
-/*   Updated: 2020/10/12 22:07:53 by kcharla          ###   ########.fr       */
+/*   Updated: 2020/10/12 22:08:04 by kcharla          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ int			rts_init(t_rts **rts_ptr)
 		return (rt_err("Cannot init ID manager"));
 	if (rts->idm.next_id(&(rts->idm)) < 0)
 		return (rt_err("ID manager error"));
+	if (rtc_scn_init(&(rts->scene)))
+		return (rt_err("Cannot init scene"));
 	*rts_ptr = rts;
 	return (0);
 }
