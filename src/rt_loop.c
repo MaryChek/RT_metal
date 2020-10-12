@@ -1,29 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rt.h                                               :+:      :+:    :+:   */
+/*   rt_loop.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kcharla <kcharla@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/07 13:17:11 by kcharla           #+#    #+#             */
-/*   Updated: 2020/10/12 22:14:41 by kcharla          ###   ########.fr       */
+/*   Created: 2020/10/12 21:52:48 by kcharla           #+#    #+#             */
+/*   Updated: 2020/10/12 21:54:03 by kcharla          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RT_H
-# define RT_H
+#include "rt.h"
 
-/*
-** Main header
-*/
-
-# include "err.h"
-# include "rts.h"
-# include "fio.h"
-# include "gui.h"
-# include "rtc.h"
-
-int		rt_init(t_rts **rts);
-int		rt_loop(t_rts *rts);
-
-#endif
+int				rt_loop(t_rts *rts)
+{
+	if (rts == NULL)
+		return (rt_err("rts_ptr is NULL pointer"));
+	return (mlx_loop(rts->mgx));
+}

@@ -1,20 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rtc_loop.c                                         :+:      :+:    :+:   */
+/*   rtc_scene.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kcharla <kcharla@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/30 21:04:13 by kcharla           #+#    #+#             */
-/*   Updated: 2020/10/12 22:12:44 by kcharla          ###   ########.fr       */
+/*   Created: 2020/10/12 20:53:18 by kcharla           #+#    #+#             */
+/*   Updated: 2020/10/12 22:10:02 by kcharla          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 
-int		rtc_loop(void *ptr)
+int			rtc_scn_init(t_scn **scn_ptr)
 {
-	(void)ptr;
+	t_scn			*scene;
+
+	if (scn_ptr == NULL)
+		return (rt_err("scn_ptr is NULL pointer"));
+	scene = NULL;
+	scene = ft_memalloc(sizeof(t_scn));
+
+	//TODO init scene
+
+	*scn_ptr = scene;
+	return (0);
+}
+
+int			rtc_scn_free(t_scn *scene)
+{
+	if (scene == NULL)
+		return (0);
+	free(scene);
 	return (0);
 }
 

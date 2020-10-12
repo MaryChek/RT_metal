@@ -6,18 +6,22 @@
 /*   By: kcharla <kcharla@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/30 20:58:12 by kcharla           #+#    #+#             */
-/*   Updated: 2020/09/30 20:58:12 by kcharla          ###   ########.fr       */
+/*   Updated: 2020/10/12 22:58:02 by kcharla          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RTC_H
 # define RTC_H
 
-int		rtc_init();
-int		rtc_loop();
+# include "rtc_scn.h"
+
+int		rtc_init(t_rts *rts);
+int		rtc_loop(void *ptr);
 void	rtc_hooks_editor(void *win);
 
 //void	rtc_hooks_viewer(void *win)
 //void	rtc_hooks_renderer(void *win)
+
+int		rtc_id_manager_init(t_idm *id_manager);
 
 #endif

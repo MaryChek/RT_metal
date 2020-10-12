@@ -6,7 +6,7 @@
 /*   By: kcharla <kcharla@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/30 21:04:09 by kcharla           #+#    #+#             */
-/*   Updated: 2020/09/30 23:50:47 by kcharla          ###   ########.fr       */
+/*   Updated: 2020/10/12 22:58:54 by kcharla          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ void		rtc_hooks_editor(void *win)
 // TODO add viewer window
 // TODO add renderer window
 
-int			rtc_init()
+int			rtc_init(t_rts *rts)
 {
-
-	if (rt_init())
-		return (rt_err("Cannot init RT struct"));
-	void *win_edit = mlx_window_add(g_mlx, 1000, 800, WINDOW_EDITOR);
+//	return (0);
+	if (rts == NULL)
+		return (rt_err("rts is NULL pointer"));
+	void *win_edit = mlx_window_add(rts->mgx, 1000, 800, WINDOW_EDITOR);
 	// creating windows
 	if (win_edit == NULL)
 		return (rt_err("Cannot init editor window"));
@@ -39,7 +39,7 @@ int			rtc_init()
 //	rtc_hooks_view(win_view);
 //	rtc_hooks_render(win_render);
 
-	mlx_loop_hook(g_mlx, rt_loop, g_rt);
+	mlx_loop_hook(rts->mgx, rtc_loop, rts);
 
 	// TODO add this
 //	if (mlx_metal_lib_load_source(d->mlx, libstr) != 0)

@@ -1,29 +1,53 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rt.h                                               :+:      :+:    :+:   */
+/*   rtc_scn_obj.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kcharla <kcharla@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/07 13:17:11 by kcharla           #+#    #+#             */
-/*   Updated: 2020/10/12 22:14:41 by kcharla          ###   ########.fr       */
+/*   Created: 2020/10/12 21:13:16 by kcharla           #+#    #+#             */
+/*   Updated: 2020/10/12 21:13:58 by kcharla          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RT_H
-# define RT_H
+#ifndef RTC_SCN_OBJ_H
+# define RTC_SCN_OBJ_H
 
-/*
-** Main header
-*/
+# include "libnum.h"
 
-# include "err.h"
-# include "rts.h"
-# include "fio.h"
-# include "gui.h"
-# include "rtc.h"
+enum e_obj_type
+{
+	NONE = 0,
+	PLANE,
+	SPHERE,
+	CYLINDER,
+	CONE,
+	GEOMETRY
+};
 
-int		rt_init(t_rts **rts);
-int		rt_loop(t_rts *rts);
+struct				s_sphere
+{
+	t_vec3			pos;
+	t_num			r;
+};
+
+struct				s_plane
+{
+	t_vec3			n;
+	t_num			d;
+};
+
+union				u_obj_content
+{
+	struct s_sphere		sphere;
+	struct s_plane		plane;
+};
+
+struct				s_obj
+{
+	int						id;
+	enum e_obj_type			type;
+	union u_obj_content		content;
+};
 
 #endif
