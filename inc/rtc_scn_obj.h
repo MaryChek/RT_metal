@@ -17,12 +17,12 @@
 
 enum e_obj_type
 {
-	NONE = 0,
-	PLANE,
-	SPHERE,
-	CYLINDER,
-	CONE,
-	GEOMETRY
+	OBJ_NONE = 0,
+	OBJ_PLANE,
+	OBJ_SPHERE,
+	OBJ_CYLINDER,
+	OBJ_CONE,
+	OBJ_GEOMETRY
 };
 
 struct				s_sphere

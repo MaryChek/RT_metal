@@ -6,21 +6,33 @@
 /*   By: kcharla <kcharla@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 20:53:18 by kcharla           #+#    #+#             */
-/*   Updated: 2020/10/12 22:10:02 by kcharla          ###   ########.fr       */
+/*   Updated: 2020/10/13 01:47:37 by kcharla          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 
-int			rtc_scn_init(t_scn **scn_ptr)
+int			rtc_scn_init(t_scn **scn_ptr, t_idm *idm)
 {
 	t_scn			*scene;
 
+	if (idm == NULL)
+		return (rt_err("idm is NULL pointer"));
 	if (scn_ptr == NULL)
 		return (rt_err("scn_ptr is NULL pointer"));
 	scene = NULL;
 	scene = ft_memalloc(sizeof(t_scn));
 
+	scene->id = 5;//idm->next_id(idm);
+
+	scene->objects[0].id = 6;
+	scene->objects[0].type = OBJ_SPHERE;
+	scene->objects[0].content.sphere.pos = (t_vec3){1.0, 2.0, 3.3};
+	scene->objects[0].content.sphere.r = (t_num){4.1};
+	scene->objects_num = 1;
+
+
+	scene->cameras_num = 0;
 	//TODO init scene
 
 	*scn_ptr = scene;

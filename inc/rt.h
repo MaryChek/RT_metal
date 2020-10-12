@@ -18,7 +18,6 @@
 */
 
 # include "err.h"
-# include "rts.h"
 # include "fio.h"
 # include "gui.h"
 # include "rtc.h"

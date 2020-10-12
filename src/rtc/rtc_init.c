@@ -6,7 +6,7 @@
 /*   By: kcharla <kcharla@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/30 21:04:09 by kcharla           #+#    #+#             */
-/*   Updated: 2020/10/12 23:27:26 by kcharla          ###   ########.fr       */
+/*   Updated: 2020/10/13 02:02:30 by kcharla          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@ void		rtc_hooks_editor(void *win)
 // TODO add renderer window
 
 #define RT_BUF_SCENE "scene"
+#define IMG_RES "image_result"
 
+#define RT_WIN_EDITOR_W 1280
+#define RT_WIN_EDITOR_H 720
 
 void rtc_mgx_load_buffer(t_rts *rts);
 void rtc_mgx_load_lib(t_rts *rts, char *name);
@@ -30,7 +33,7 @@ int			rtc_init(t_rts *rts)
 {
 	if (rts == NULL)
 		return (rt_err("rts is NULL pointer"));
-	void *win_edit = mlx_window_add(rts->mgx, 1000, 800, WINDOW_EDITOR);
+	void *win_edit = mlx_window_add(rts->mgx, RT_WIN_EDITOR_W, RT_WIN_EDITOR_H, WINDOW_EDITOR);
 	// creating windows
 	if (win_edit == NULL)
 		return (rt_err("Cannot init editor window"));
@@ -52,9 +55,20 @@ int			rtc_init(t_rts *rts)
 //	else
 //		printf("lib success!\n");
 
-	rtc_mgx_load_lib(rts, "src/mtl/mtl_shader_language_example.metal");
+	rtc_mgx_load_lib(rts, "src/mtl/mtl_basic.metal");
 	rtc_mgx_load_buffer(rts);
 
+	if (mlx_image_add(rts->mgx, IMG_RES, RT_WIN_EDITOR_W, RT_WIN_EDITOR_H) == NULL)
+		ft_printf("image govno\n");
+	else
+		ft_printf("image success!\n");
+
+	if (mlx_metal_kernel_run(rts->mgx, "scene_test", RT_BUF_SCENE, IMG_RES))
+		ft_printf("kernel govno\n");
+	else
+		ft_printf("kernel success!\n");
+
+	mlx_image_put(rts->mgx, win_edit, IMG_RES, 0, 0);
 
 	return (0);
 }

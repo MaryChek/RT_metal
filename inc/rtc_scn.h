@@ -6,7 +6,7 @@
 /*   By: kcharla <kcharla@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 16:13:04 by kcharla           #+#    #+#             */
-/*   Updated: 2020/10/12 22:10:41 by kcharla          ###   ########.fr       */
+/*   Updated: 2020/10/13 01:00:53 by kcharla          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,11 @@ typedef struct		s_scn
 	int				id;
 	struct s_obj	objects[RT_MAX_OBJECTS];
 	int				objects_num;
-	int				objects_max;
+//	int				objects_max;
 	struct s_cam	cameras[RT_MAX_CAMERAS];
 	int				cameras_num;
-	int				cameras_max;
+//	int				cameras_max;
 }					t_scn;
 
-int					rtc_scn_init(t_scn **scn_ptr);
-int					rtc_scn_free(t_scn *scene);
 
 #endif
