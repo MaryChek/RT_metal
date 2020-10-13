@@ -6,7 +6,7 @@
 /*   By: kcharla <kcharla@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/30 21:04:09 by kcharla           #+#    #+#             */
-/*   Updated: 2020/10/14 01:44:10 by kcharla          ###   ########.fr       */
+/*   Updated: 2020/10/14 01:55:35 by kcharla          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,43 +79,6 @@ int			rtc_init(t_rts *rts)
 	mlx_image_put(rts->mgx, win_edit, IMG_RES, 0, 0);
 
 	return (0);
-}
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-void rtc_mgx_load_lib(t_rts *rts, char *name)
-{
-	char * libstr = NULL;
-	long length;
-	FILE * f = fopen (name, "rb");
-
-	if (f)
-	{
-		fseek (f, 0, SEEK_END);
-		length = ftell (f);
-		fseek (f, 0, SEEK_SET);
-		libstr = malloc (length + 1);
-		if (libstr)
-		{
-			fread (libstr, 1, length, f);
-		}
-		fclose (f);
-
-	}
-
-	if (libstr == NULL)
-	{
-		printf("file govno!\n");
-		return ;
-	}
-
-	libstr[length] = '\0';
-	if (mlx_metal_lib_load_source(rts->mgx, libstr) != 0)
-		printf("lib govno\n");
-	else
-		printf("lib success!\n");
 }
 
 void rtc_mgx_load_buffer(t_rts *rts)
