@@ -6,15 +6,15 @@
 /*   By: kcharla <kcharla@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/07 13:17:00 by kcharla           #+#    #+#             */
-/*   Updated: 2020/09/07 15:44:43 by kcharla          ###   ########.fr       */
+/*   Updated: 2020/10/12 20:50:58 by kcharla          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FIO_H
 # define FIO_H
 
-# include "rt_s.h"
+# include "rts.h"
 
-t_scene		*fio_zip_load(char *filename);
+t_scn		*fio_zip_load(char *filename);
 
 #endif
