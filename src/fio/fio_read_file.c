@@ -1,14 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fio_read_files.c                                   :+:      :+:    :+:   */
+/*   fio_read_file.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kcharla <kcharla@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/14 00:12:16 by kcharla           #+#    #+#             */
-/*   Updated: 2020/10/14 00:48:02 by kcharla          ###   ########.fr       */
+/*   Created: 2020/10/14 00:49:09 by kcharla           #+#    #+#             */
+/*   Updated: 2020/10/14 00:49:12 by kcharla          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "rt.h"
 
 int				fio_read_err(char *msg, char *buf2free, int fd2close)
 {
@@ -45,10 +47,5 @@ int				fio_read_file(char **dest, char *file)
 	if (val < 0)
 		return (fio_read_err("System call read() returned error", *dest, fd));
 	close(fd);
-	return (0);
-}
-
-int				fio_read_files(char **dest, char *files)
-{
 	return (0);
 }

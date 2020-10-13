@@ -6,49 +6,61 @@
 /*   By: kcharla <kcharla@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 00:12:16 by kcharla           #+#    #+#             */
-/*   Updated: 2020/10/14 00:48:02 by kcharla          ###   ########.fr       */
+/*   Updated: 2020/10/14 01:18:50 by kcharla          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int				fio_read_err(char *msg, char *buf2free, int fd2close)
+#include "rt.h"
+
+int				fio_read_files_cat(char **dest, char **files)
 {
-	free(buf2free);
-	close(fd2close);
-	return (rt_err(msg));
-}
+	int			i;
+	size_t		size;
 
-#define FIO_BUFFER_SIZE 1024
-
-/*
-** fnctl() is used to get state of file descriptor
-** if any error happened during open() then fnctl() will return non-zero
-*/
-
-int				fio_read_file(char **dest, char *file)
-{
-	int			fd;
-	int			val;
-	char		buf[FIO_BUFFER_SIZE + 1];
-
-	if (dest == NULL || file == NULL)
+	if (dest == NULL || files == NULL)
 		return (rt_err("Argument is NULL pointer"));
-	if (fcntl((fd = open(file, O_RDONLY)), F_GETFD) != 0)
-		return (rt_err("Cannot open file"));
-	*dest = NULL;
-	while ((val = read(fd, buf, FIO_BUFFER_SIZE)) > 0)
-	{
-		buf[val] = '\0';
-		file = *dest;
-		if ((*dest = ft_str_add(*dest, buf)) == NULL)
-			return (fio_read_err("Variable str is NULL pointer", file, fd));
-	}
-	if (val < 0)
-		return (fio_read_err("System call read() returned error", *dest, fd));
-	close(fd);
+	size = 0;
+	i = 0;
+	while (files[i] != NULL)
+		size += ft_strlen(files[i]);
+	if ((*dest = ft_memalloc(size + 1)) == NULL)
+		return (rt_err("System call malloc() returned NULL pointer"));
+	(*dest)[0] = '\0';
+	i = 0;
+	while (files[i] != NULL)
+		ft_strcat(*dest, files[i]);
 	return (0);
 }
 
-int				fio_read_files(char **dest, char *files)
+/*
+** Glues contents of multiple files into one string
+**
+** example call:
+** fio_read_files(&mystr, "file1 file2 dir/file3");
+*/
+
+int				fio_read_files(char **dest, char *filenames)
 {
+	int			i;
+	char		**files;
+	int			size;
+
+	if (filenames == NULL || dest == NULL)
+		return (rt_err("Argument is NULL pointer"));
+	files = ft_strsplit(filenames, ' ');
+	i = 0;
+	while (files[i] != NULL)
+	{
+		if (fio_read_file(&(files[i]), files[i]))
+		{
+			ft_free_char_2d_arr(&files);
+			return (rt_err("Cannot read files"));
+		}
+		i++;
+	}
+	i = fio_read_files_cat(dest, files);
+	ft_free_char_2d_arr(&files);
+	if (i != 0)
+		return (rt_err("Cannot concat file contents"));
 	return (0);
 }
