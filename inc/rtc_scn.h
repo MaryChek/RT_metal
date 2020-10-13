@@ -52,7 +52,7 @@ typedef struct		s_scn
 	struct s_obj	objects[RT_MAX_OBJECTS];
 	int				objects_num;
 	struct s_cam	cameras[RT_MAX_CAMERAS];
-	int				cameras_active;
+	int				camera_active;
 	int				cameras_num;
 	struct s_mat	materials[RT_MAX_MATERIALS];
 	int				materials_num;

@@ -6,7 +6,7 @@
 /*   By: kcharla <kcharla@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 20:53:18 by kcharla           #+#    #+#             */
-/*   Updated: 2020/10/13 05:12:07 by kcharla          ###   ########.fr       */
+/*   Updated: 2020/10/13 22:59:10 by kcharla          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int			rtc_scn_init(t_scn **scn_ptr, t_idm *idm)
 
 	scene->objects[0].id = 6;
 	scene->objects[0].type = OBJ_SPHERE;
+	scene->objects[0].material_id = 9;
 	scene->objects[0].content.sphere.pos = (t_vec3){50.0, 0.0, 0.0};
 	scene->objects[0].content.sphere.r = (t_num){4.1};
 	scene->objects_num = 1;
@@ -46,9 +47,10 @@ int			rtc_scn_init(t_scn **scn_ptr, t_idm *idm)
 	scene->materials[0].roughness = 0.5f;
 	scene->materials[0].ior = 1.2f;
 	scene->materials[0].transparency = 0.0f;
-	scene->materials[0].albedo = (t_vec3){0.0, 1.0, 0.0};
+	scene->materials[0].albedo = (t_vec3){1.0, 1.0, 0.0};
 	scene->materials[0].f0 = (t_vec3){0.0, 0.0, 0.0};
 	scene->materials_num = 1;
+	scene->materials_num = 2;
 	//TODO init scene
 
 	*scn_ptr = scene;
