@@ -6,7 +6,7 @@
 /*   By: kcharla <kcharla@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/30 21:04:09 by kcharla           #+#    #+#             */
-/*   Updated: 2020/10/13 02:02:30 by kcharla          ###   ########.fr       */
+/*   Updated: 2020/10/14 01:55:35 by kcharla          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void		rtc_hooks_editor(void *win)
 // TODO add viewer window
 // TODO add renderer window
 
+#define RT_MTL_FILES "src/mtl/_rt__structs.metal src/mtl/_rt__utils.metal src/mtl/_rt_sphere.metal src/mtl/_rt___kernel.metal"
 #define RT_BUF_SCENE "scene"
 #define IMG_RES "image_result"
 
@@ -55,7 +56,14 @@ int			rtc_init(t_rts *rts)
 //	else
 //		printf("lib success!\n");
 
-	rtc_mgx_load_lib(rts, "src/mtl/mtl_basic.metal");
+	char *lib_source = NULL;
+
+	if (fio_read_files(&lib_source, RT_MTL_FILES))
+		rt_err("Cannot read metal library source files");
+	mlx_metal_lib_load_source(rts->mgx, lib_source);
+
+//	rtc_mgx_load_lib(rts, "src/mtl/mtl_basic.metal");
+
 	rtc_mgx_load_buffer(rts);
 
 	if (mlx_image_add(rts->mgx, IMG_RES, RT_WIN_EDITOR_W, RT_WIN_EDITOR_H) == NULL)
@@ -71,43 +79,6 @@ int			rtc_init(t_rts *rts)
 	mlx_image_put(rts->mgx, win_edit, IMG_RES, 0, 0);
 
 	return (0);
-}
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-void rtc_mgx_load_lib(t_rts *rts, char *name)
-{
-	char * libstr = NULL;
-	long length;
-	FILE * f = fopen (name, "rb");
-
-	if (f)
-	{
-		fseek (f, 0, SEEK_END);
-		length = ftell (f);
-		fseek (f, 0, SEEK_SET);
-		libstr = malloc (length + 1);
-		if (libstr)
-		{
-			fread (libstr, 1, length, f);
-		}
-		fclose (f);
-
-	}
-
-	if (libstr == NULL)
-	{
-		printf("file govno!\n");
-		return ;
-	}
-
-	libstr[length] = '\0';
-	if (mlx_metal_lib_load_source(rts->mgx, libstr) != 0)
-		printf("lib govno\n");
-	else
-		printf("lib success!\n");
 }
 
 void rtc_mgx_load_buffer(t_rts *rts)

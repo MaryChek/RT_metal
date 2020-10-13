@@ -6,7 +6,7 @@
 /*   By: kcharla <kcharla@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/14 00:12:16 by kcharla           #+#    #+#             */
-/*   Updated: 2020/10/14 01:18:50 by kcharla          ###   ########.fr       */
+/*   Updated: 2020/10/14 01:37:28 by kcharla          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@ int				fio_read_files_cat(char **dest, char **files)
 	size = 0;
 	i = 0;
 	while (files[i] != NULL)
-		size += ft_strlen(files[i]);
+		size += ft_strlen(files[i++]);
 	if ((*dest = ft_memalloc(size + 1)) == NULL)
 		return (rt_err("System call malloc() returned NULL pointer"));
 	(*dest)[0] = '\0';
 	i = 0;
 	while (files[i] != NULL)
-		ft_strcat(*dest, files[i]);
+		ft_strcat(*dest, files[i++]);
 	return (0);
 }
 
@@ -43,7 +43,6 @@ int				fio_read_files(char **dest, char *filenames)
 {
 	int			i;
 	char		**files;
-	int			size;
 
 	if (filenames == NULL || dest == NULL)
 		return (rt_err("Argument is NULL pointer"));
