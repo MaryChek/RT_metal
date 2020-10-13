@@ -13,21 +13,27 @@
 #include <metal_stdlib>
 using namespace metal;
 
-typedef struct		s_ray {
-	packed_float3 origin;
-	packed_float3 direction;
-	float minDistance;
-	float maxDistance;
-}					t_ray;
+constant const float pi = 3.14159265358979323846f;
+
+typedef struct		Ray {
+	float3 pos;
+	float3 dir;
+	float max;
+	float min;
+	Ray() : pos(0.0f), dir(1.0f), max(INFINITY), min(0) {};
+	Ray(	float3 p, float3 d,
+			float max = INFINITY, float min = 0.0 )
+			: pos(p), dir(normalize(d)), max(max), min(min) {};
+} Ray;
 
 enum e_obj_type
 {
-	NONE = 0,
-	PLANE,
-	SPHERE,
-	CYLINDER,
-	CONE,
-	GEOMETRY
+	OBJ_NONE = 0,
+	OBJ_PLANE,
+	OBJ_SPHERE,
+	OBJ_CYLINDER,
+	OBJ_CONE,
+	OBJ_GEOMETRY
 };
 
 struct				s_sphere
@@ -51,6 +57,7 @@ union				u_obj_content
 struct				s_obj
 {
 	int						id;
+	int						material_id;
 	enum e_obj_type			type;
 	union u_obj_content		content;
 };
@@ -65,8 +72,20 @@ struct				s_cam
 	packed_float3	fov;
 };
 
+struct				s_mat
+{
+	int				id;
+	float 			metalness;
+	float 			roughness;
+	float 			ior;
+	float 			transparency;
+	packed_float3	albedo;
+	packed_float3	f0;
+};
+
 #define RT_MAX_OBJECTS 128
 #define RT_MAX_CAMERAS 16
+#define RT_MAX_MATERIALS 32
 
 typedef struct		s_scn
 {
@@ -75,16 +94,92 @@ typedef struct		s_scn
 	int				objects_num;
 	struct s_cam	cameras[RT_MAX_CAMERAS];
 	int				cameras_num;
+	struct s_mat	materials[RT_MAX_MATERIALS];
+	int				materials_num;
 }					t_scn;
 
-t_ray rt_camera_get_ray(device struct s_cam *cam, uint2 viewport, uint2 pixel)
+float		map(float x, float2 in, float2 out)
 {
-	t_ray ray;
-	ray.origin = cam->pos;
-	ray.direction = cam->forward;
-	ray.minDistance = 0.0;
-	ray.maxDistance = INFINITY;
+	return ((x - in.x) * (out.y - out.x) / (in.y - in.x) + out.x);
+}
+
+float2		map2(float2 val, float4 in, float4 out)
+{
+	return (float2(map(val.x, in.xy, out.xy), map(val.y, in.zw, out.zw)));
+}
+
+// val must be in range (0 .. pi/2)
+// from and to must be normalized
+// from and to must be in 90 degree angle
+float3 rt_interpolation_round(float val, float3 from, float3 to)
+{
+	return (normalize(from * cos(val) + to * sin(val)));
+}
+
+//round interpolation
+float3 rerp(float val, float3 from, float3 to)
+{
+	return (normalize(from * cos(val) + to * sin(val)));
+}
+
+float3 rerp2(float2 val, float3 fromX, float3 toY, float3 toZ)
+{
+	return (normalize(rerp(val.x, fromX, toY) + rerp(val.y, fromX, toZ)));
+}
+
+Ray rt_camera_get_ray(device struct s_cam *cam, uint2 viewport, uint2 pixel)
+{
+	float2 v = static_cast<float2>(viewport);
+	float2 p = static_cast<float2>(pixel);
+	//fov-range x and y
+	float4 fr;
+	fr.xy = float2(-1 * cam->fov[0] / 2, cam->fov[0] / 2);
+	fr.zw = float2(-1 * cam->fov[1] / 2, cam->fov[1] / 2);
+	//map to radians
+	p = map2(p, float4(0, v.x, 0, v.y), fr) * pi / 180.0f;
+	float3 dest = rerp2(p, float3(cam->forward), float3(cam->right), float3(cam->up));
+	Ray ray = Ray(float3(cam->pos), dest);
 	return ray;
+}
+
+float2		rt_intersect_sphere(Ray ray, device struct s_sphere *sphere)
+{
+	float		a;
+	float		b;
+	float		c;
+	float		d;
+	float3		a_min_c;
+
+	a_min_c = (ray.pos - sphere->pos);
+	a = dot(ray.dir, ray.dir);
+	b = 2 * dot(ray.dir, a_min_c);
+	c = dot(a_min_c, a_min_c) - (sphere->r * sphere->r);
+	d = (b * b) - 4 * a * c;
+	if (d < 0)
+		return (float2(INFINITY));
+	return (float2(((-b - sqrt(d)) / (2 * a), (-b + sqrt(d)) / (2 * a))));
+}
+
+float	rt_dist_sphere(Ray ray, device struct s_sphere *sphere)
+{
+	float			minimal;
+	float2			points;
+
+	points = rt_intersect_sphere(ray, sphere);
+	minimal = INFINITY;
+	if (points.x > 0 && points.x < minimal)
+		minimal = points.x;
+	if (points.y > 0 && points.y < minimal)
+		minimal = points.y;
+	return (minimal);
+}
+
+float rt_dist(Ray ray, device struct s_obj *obj)
+{
+	if (obj->type == OBJ_SPHERE) {
+		return (rt_dist_sphere(ray, &(obj->content.sphere)));
+	}
+	return (INFINITY);
 }
 
 kernel void scene_test(	device struct		s_scn		*scene	[[buffer(0)]],
@@ -92,16 +187,34 @@ kernel void scene_test(	device struct		s_scn		*scene	[[buffer(0)]],
 						uint2                  			gid 	[[thread_position_in_grid]])
 {
 	uint2 size = uint2(out.get_width(), out.get_height());
-	if (gid.x < size.x && gid.y < size.x)
+	device struct s_cam *cam = &scene->cameras[0];
+
+	if (gid.x < size.x && gid.y < size.y)
 	{
-		int32_t id = scene->id;
-//		float x = scene->objects[0].content.sphere.x;
 		float4 color = float4(0.5, 0.5, 0.5, 0);
 
-		if (scene->objects[0].content.sphere.r == 4.1) {
+		Ray ray = rt_camera_get_ray(cam, size, gid);
+
+		int		nearest_id = -1;
+		float	nearest_dist = INFINITY;
+
+		for (int i = 0; i < scene->objects_num; i++)
+		{
+			float dist = rt_dist(ray, &scene->objects[i]);
+			if (dist < nearest_dist && dist != INFINITY) {
+				nearest_id = i;
+				nearest_dist = dist;
+			}
+		}
+
+		if (nearest_id == 0) {
 			color = float4(0, 1, 0, 0);
 		}
-//		ray r = rt_camera_get_ray(&scene->cameras[0], out.height, gid);
+
+//		if (length(ray.dir - cam->forward) < 0.001) {
+//			color = float4(0, 1, 0, 0);
+//		}
+
 		out.write(color, gid);
 	}
 }

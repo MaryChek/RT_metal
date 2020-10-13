@@ -6,7 +6,7 @@
 /*   By: kcharla <kcharla@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 21:13:16 by kcharla           #+#    #+#             */
-/*   Updated: 2020/10/12 21:13:58 by kcharla          ###   ########.fr       */
+/*   Updated: 2020/10/13 01:12:07 by kcharla          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ union				u_obj_content
 struct				s_obj
 {
 	int						id;
+	int						material_id;
 	enum e_obj_type			type;
 	union u_obj_content		content;
 };
