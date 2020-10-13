@@ -19,8 +19,6 @@ int				fio_read_err(char *msg, char *buf2free, int fd2close)
 	return (rt_err(msg));
 }
 
-#define FIO_BUFFER_SIZE 1024
-
 /*
 ** fnctl() is used to get state of file descriptor
 ** if any error happened during open() then fnctl() will return non-zero
