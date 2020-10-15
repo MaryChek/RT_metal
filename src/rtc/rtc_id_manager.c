@@ -1,28 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   rtc_id_manager.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kcharla <kcharla@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/02 23:48:38 by kcharla           #+#    #+#             */
-/*   Updated: 2020/10/12 22:19:10 by kcharla          ###   ########.fr       */
+/*   Created: 2020/10/12 21:21:25 by kcharla           #+#    #+#             */
+/*   Updated: 2020/10/12 22:15:41 by kcharla          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 
-//TODO parse arguments
-
-int				main(int ac, char **av)
+int			rtc_id_manager_next_id(t_idm *id_manager)
 {
-	t_rts		*rts;
+	if (id_manager == NULL)
+		return (rt_err("id_manager is NULL pointer"));
+	return (id_manager->current_id++);
+}
 
-	(void)ac;
-	(void)av;
-	if (rt_init(&rts))
-		return (rt_err("Cannot init RT"));
-	if (rt_loop(rts))
-		return (rt_err("Cannot loop RT"));
+int			rtc_id_manager_init(t_idm *id_manager)
+{
+	id_manager->current_id = 0;
+	id_manager->next_id = rtc_id_manager_next_id;
 	return (0);
 }

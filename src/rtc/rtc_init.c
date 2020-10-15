@@ -6,7 +6,7 @@
 /*   By: kcharla <kcharla@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/30 21:04:09 by kcharla           #+#    #+#             */
-/*   Updated: 2020/09/30 23:50:47 by kcharla          ###   ########.fr       */
+/*   Updated: 2020/10/14 01:55:35 by kcharla          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,21 @@ void		rtc_hooks_editor(void *win)
 // TODO add viewer window
 // TODO add renderer window
 
-int			rtc_init()
-{
+#define RT_MTL_FILES "src/mtl/_rt__structs.metal src/mtl/_rt__utils.metal src/mtl/_rt_sphere.metal src/mtl/_rt___kernel.metal"
+#define RT_BUF_SCENE "scene"
+#define IMG_RES "image_result"
 
-	if (rt_init())
-		return (rt_err("Cannot init RT struct"));
-	void *win_edit = mlx_window_add(g_mlx, 1000, 800, WINDOW_EDITOR);
+#define RT_WIN_EDITOR_W 1280
+#define RT_WIN_EDITOR_H 720
+
+void rtc_mgx_load_buffer(t_rts *rts);
+void rtc_mgx_load_lib(t_rts *rts, char *name);
+
+int			rtc_init(t_rts *rts)
+{
+	if (rts == NULL)
+		return (rt_err("rts is NULL pointer"));
+	void *win_edit = mlx_window_add(rts->mgx, RT_WIN_EDITOR_W, RT_WIN_EDITOR_H, WINDOW_EDITOR);
 	// creating windows
 	if (win_edit == NULL)
 		return (rt_err("Cannot init editor window"));
@@ -39,7 +48,7 @@ int			rtc_init()
 //	rtc_hooks_view(win_view);
 //	rtc_hooks_render(win_render);
 
-	mlx_loop_hook(g_mlx, rt_loop, g_rt);
+	mlx_loop_hook(rts->mgx, rtc_loop, rts);
 
 	// TODO add this
 //	if (mlx_metal_lib_load_source(d->mlx, libstr) != 0)
@@ -47,5 +56,36 @@ int			rtc_init()
 //	else
 //		printf("lib success!\n");
 
+	char *lib_source = NULL;
+
+	if (fio_read_files(&lib_source, RT_MTL_FILES))
+		rt_err("Cannot read metal library source files");
+	mlx_metal_lib_load_source(rts->mgx, lib_source);
+
+//	rtc_mgx_load_lib(rts, "src/mtl/mtl_basic.metal");
+
+	rtc_mgx_load_buffer(rts);
+
+	if (mlx_image_add(rts->mgx, IMG_RES, RT_WIN_EDITOR_W, RT_WIN_EDITOR_H) == NULL)
+		ft_printf("image govno\n");
+	else
+		ft_printf("image success!\n");
+
+	if (mlx_metal_kernel_run(rts->mgx, "scene_test", RT_BUF_SCENE, IMG_RES))
+		ft_printf("kernel govno\n");
+	else
+		ft_printf("kernel success!\n");
+
+	mlx_image_put(rts->mgx, win_edit, IMG_RES, 0, 0);
+
 	return (0);
 }
+
+void rtc_mgx_load_buffer(t_rts *rts)
+{
+	if (mlx_metal_buffer_add(rts->mgx, RT_BUF_SCENE, (void*)(rts->scene), (int)sizeof(t_scn)))
+		ft_printf("buffer govno\n");
+	else
+	ft_printf("buffer success!\n");
+}
+

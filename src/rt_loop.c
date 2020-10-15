@@ -1,23 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rt_init.c                                          :+:      :+:    :+:   */
+/*   rt_loop.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kcharla <kcharla@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/30 21:04:04 by kcharla           #+#    #+#             */
-/*   Updated: 2020/09/30 21:04:04 by kcharla          ###   ########.fr       */
+/*   Created: 2020/10/12 21:52:48 by kcharla           #+#    #+#             */
+/*   Updated: 2020/10/12 21:54:03 by kcharla          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 
-//TODO implement initialization
-
-int			rt_init()
+int				rt_loop(t_rts *rts)
 {
-	g_rt = ft_memalloc(sizeof(t_rt));
-	if (g_rt == NULL)
-		return (rt_err("Cannot malloc g_rt variable"));
-	return (0);
+	if (rts == NULL)
+		return (rt_err("rts_ptr is NULL pointer"));
+	return (mlx_loop(rts->mgx));
 }

@@ -1,26 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mtl_shader_language_example.msl                    :+:      :+:    :+:   */
+/*   _rt__structs.metal                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kcharla <kcharla@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/07 11:06:07 by kcharla           #+#    #+#             */
-/*   Updated: 2020/09/07 11:06:07 by kcharla          ###   ########.fr       */
+/*   Created: 2020/10/14 01:53:59 by kcharla           #+#    #+#             */
+/*   Updated: 2020/10/14 01:53:59 by kcharla          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <metal_stdlib>
 using namespace metal;
 
+constant const float pi = 3.14159265358979323846f;
+
+typedef struct		Ray {
+	float3 pos;
+	float3 dir;
+	float max;
+	float min;
+	Ray() : pos(0.0f), dir(1.0f), max(INFINITY), min(0) {};
+	Ray(	float3 p, float3 d,
+	float max = INFINITY, float min = 0.0 )
+	: pos(p), dir(normalize(d)), max(max), min(min) {};
+} Ray;
+
 enum e_obj_type
 {
-	NONE = 0,
-	PLANE,
-	SPHERE,
-	CYLINDER,
-	CONE,
-	GEOMETRY
+	OBJ_NONE = 0,
+	OBJ_PLANE,
+	OBJ_SPHERE,
+	OBJ_CYLINDER,
+	OBJ_CONE,
+	OBJ_GEOMETRY
 };
 
 struct				s_sphere
@@ -44,6 +57,7 @@ union				u_obj_content
 struct				s_obj
 {
 	int						id;
+	int						material_id;
 	enum e_obj_type			type;
 	union u_obj_content		content;
 };
@@ -51,15 +65,27 @@ struct				s_obj
 struct				s_cam
 {
 	int				id;
-	float3			pos;
-	float3			forward;
-	float3			up;
-	float3			right;
-	float3			fov;
+	packed_float3	pos;
+	packed_float3	forward;
+	packed_float3	up;
+	packed_float3	right;
+	packed_float2	fov;
+};
+
+struct				s_mat
+{
+	int				id;
+	float 			metalness;
+	float 			roughness;
+	float 			ior;
+	float 			transparency;
+	packed_float3	albedo;
+	packed_float3	f0;
 };
 
 #define RT_MAX_OBJECTS 128
 #define RT_MAX_CAMERAS 16
+#define RT_MAX_MATERIALS 32
 
 typedef struct		s_scn
 {
@@ -67,26 +93,9 @@ typedef struct		s_scn
 	struct s_obj	objects[RT_MAX_OBJECTS];
 	int				objects_num;
 	struct s_cam	cameras[RT_MAX_CAMERAS];
+	int				camera_active;
 	int				cameras_num;
+	struct s_mat	materials[RT_MAX_MATERIALS];
+	int				materials_num;
 }					t_scn;
-
-
-
-kernel void scene_test(	device struct		s_scn		*scene	[[buffer(0)]],
-						texture2d<float,access::write> 	out		[[texture(1)]],
-						uint2                  			gid 	[[thread_position_in_grid]])
-{
-	if (gid.x < out.get_width() && gid.y < out.get_height())
-	{
-		int32_t id = scene->id;
-//		float x = scene->objects[0].content.sphere.x;
-		float4 color = float4(0.5, 0.5, 0.5, 0);
-
-		if (scene->objects[0].content.sphere.r == 4.1) {
-			color = float4(0, 1, 0, 0);
-		}
-		out.write(color, gid);
-	}
-}
-
 
